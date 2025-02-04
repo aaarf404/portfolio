@@ -55,18 +55,23 @@ input, textarea, button {
 
 form {
     display: grid;
-    grid-template-columns: auto 1fr;
+    grid-template-columns: auto 1fr; /* Two columns: labels & inputs */
     gap: 1em;
     max-width: 500px;
 }
 
 form label {
     text-align: right;
-    grid-column: 1 / -1;
 }
 
 form input,
 form textarea {
+    width: 100%;
+    box-sizing: border-box; /* Ensures input width includes padding/borders */
+}
+
+form button {
+    grid-column: 1 / -1; /* Makes the button span across both columns */
     width: 100%;
 }
 
