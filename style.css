@@ -10,6 +10,11 @@ body {
 	line-height: 1.5;
 }
 
+html {
+    --color-accent: oklch(65% 50% 0);
+    accent-color: var(--color-accent);
+}
+
 img {
     width: 30%; /* Image will take up 50% of the screen width */
     max-width: 400px; /* Prevents it from getting too big */
@@ -38,4 +43,8 @@ nav a {
 
 nav a.current {
      border-bottom: 0.4em solid oklch(80% 3% 200);
+}
+
+nav a:hover {
+    border-bottom: 0.4em solid var(--color-accent);
 }
