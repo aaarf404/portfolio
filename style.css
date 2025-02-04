@@ -48,3 +48,22 @@ nav a.current {
 nav a:hover {
     border-bottom: 0.4em solid var(--color-accent);
 }
+
+input, textarea, button {
+    font: inherit;
+}
+
+form {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 0.5em;
+    max-width: 500px;
+}
+
+form label {
+    text-align: right;
+}
+
+form input,
+form textarea {
+    width: 100%;
