@@ -56,14 +56,38 @@ input, textarea, button {
 form {
     display: grid;
     grid-template-columns: auto 1fr;
-    gap: 0.5em;
+    gap: 1em;
     max-width: 500px;
 }
 
 form label {
     text-align: right;
+    grid-column: 1 / -1;
 }
 
 form input,
 form textarea {
     width: 100%;
+}
+
+.projects article {
+    gap: 1em;
+    display: grid;
+    grid-template-rows: subgrid;
+    grid-row: span 3;
+
+}
+
+h2 {
+    margin: 0;
+}
+
+h1 {
+    font-size: 400%;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    line-height: 1.1;
+    text-wrap: balance;
+}
+
