@@ -2,9 +2,14 @@ body {
   /* Set line height to 1.5 times the font size
 	   and use the OS’s UI font as the website font
 	 */
-  font: 100%/1.5 system-ui;
-	
+  	font: 100%/1.5 system-ui;
+	max-width: 100ch; 
+	margin-inline: max(1em, (100% - 100ch) / 2); 
+	padding-inline: 1rem;
+	font-family: system-ui, sans-serif;
+	line-height: 1.5;
 }
+
 img {
     width: 30%; /* Image will take up 50% of the screen width */
     max-width: 400px; /* Prevents it from getting too big */
