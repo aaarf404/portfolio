@@ -3,4 +3,10 @@ body {
 	   and use the OS’s UI font as the website font
 	 */
   font: 100%/1.5 system-ui;
+	
+}
+img {
+    width: 30%; /* Image will take up 50% of the screen width */
+    max-width: 400px; /* Prevents it from getting too big */
+    height: auto;
 }
