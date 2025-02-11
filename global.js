@@ -5,6 +5,26 @@ function $$(selector, context = document) {
 }
 
 const ARE_WE_HOME = document.documentElement.classList.contains("home");
+document.body.insertAdjacentHTML( /* ADDED */
+  'afterbegin',
+  `
+  <label class="color-scheme"> <!-- ADDED -->
+    Theme:
+    <select> <!-- ADDED -->
+      <option value="light dark">Automatic</option> <!-- ADDED -->
+      <option value="light">Light</option> <!-- ADDED -->
+      <option value="dark">Dark</option> <!-- ADDED -->
+    </select>
+  </label>
+`
+); /* ADDED */
+
+// ADDED: Listen for changes to the <select> and set color-scheme
+const select = document.querySelector('.color-scheme select'); /* ADDED */
+select.addEventListener('input', function (event) { /* ADDED */
+  document.documentElement.style.setProperty('color-scheme', event.target.value); /* ADDED */
+});
+
 
 const pages = [
   { url: "",          title: "Home" },
