@@ -6,35 +6,33 @@ function $$(selector, context = document) {
 
 const ARE_WE_HOME = document.documentElement.classList.contains("home");
 
-fetch("./global.json")
-  .then(response => response.json())
-  .then(pages => {
-    const nav = document.createElement("nav");
-    document.body.prepend(nav);
+const pages = [
+  { url: "",          title: "Home" },
+  { url: "cv/",       title: "CV" },
+  { url: "projects/", title: "Projects" },
+  { url: "contact/",  title: "Contact" },
+  { url: "https://github.com/aaaarf404", title: "GitHub" }
+];
 
-    pages.forEach(item => {
-      let { url, title } = item;
-      if (!ARE_WE_HOME && !url.startsWith("http")) {
-        url = "../" + url;
-      }
+const nav = document.createElement("nav");
+document.body.prepend(nav);
 
-      // CHANGED: Create a real <a> element and set properties
-      let a = document.createElement("a"); 
-      a.href = url;                       
-      a.textContent = title;               
-      nav.append(a);                      
+pages.forEach(item => {
+  let { url, title } = item;
+  if (!ARE_WE_HOME && !url.startsWith("http")) {
+    url = "../" + url; 
+  }
 
-      // ADDED: Highlight the current link
-      if (a.host === location.host && a.pathname === location.pathname) {
-        a.classList.add("current"); 
-      }
+  const a = document.createElement("a");
+  a.href = url;
+  a.textContent = title;
+  nav.append(a);
 
-      // ADDED: Open external links in a new tab
-      if (a.host !== location.host) {
-        a.target = "_blank";   
-      }
-    });
-  })
-  .catch(err => {
-    console.error("Error fetching global.json:", err);
-  });
+  if (a.host === location.host && a.pathname === location.pathname) {
+    a.classList.add("current");
+  }
+
+  if (a.host !== location.host) {
+    a.target = "_blank";
+  }
+});
