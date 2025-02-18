@@ -5,21 +5,20 @@ function $$(selector, context = document) {
 }
 
 const ARE_WE_HOME = document.documentElement.classList.contains("home");
-document.body.insertAdjacentHTML( /* ADDED */
+document.body.insertAdjacentHTML( 
   'afterbegin',
   `
-  <label class="color-scheme"> <!-- ADDED -->
+  <label class="color-scheme">
     Theme:
-    <select> <!-- ADDED -->
-      <option value="light dark">Automatic</option> <!-- ADDED -->
-      <option value="light">Light</option> <!-- ADDED -->
-      <option value="dark">Dark</option> <!-- ADDED -->
+    <select> 
+      <option value="light dark">Automatic</option> 
+      <option value="light">Light</option> 
+      <option value="dark">Dark</option> 
     </select>
   </label>
 `
-); /* ADDED */
+);
 
-// ADDED: Listen for changes to the <select> and set color-scheme
 const select = document.querySelector('.color-scheme select'); /* ADDED */
 select.addEventListener('input', function (event) { /* ADDED */
   document.documentElement.style.setProperty('color-scheme', event.target.value); /* ADDED */
@@ -56,3 +55,21 @@ pages.forEach(item => {
     a.target = "_blank";
   }
 });
+
+export async function fetchJSON(url) {
+    try {
+        // Fetch the JSON file from the given URL
+        const response = await fetch(url);
+        if (!response.ok) {
+      throw new Error(`Failed to fetch projects: ${response.statusText}`);
+}
+
+    } catch (error) {
+        console.error('Error fetching or parsing JSON data:', error);
+    }
+}
+
+const data = await response.json();
+return data; 
+
+
