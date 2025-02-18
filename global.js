@@ -5,26 +5,28 @@ function $$(selector, context = document) {
 }
 
 const ARE_WE_HOME = document.documentElement.classList.contains("home");
-document.body.insertAdjacentHTML( 
-  'afterbegin',
+
+// COLOR SCHEME SWITCHER
+document.body.insertAdjacentHTML(/* EXISTING */
+  "afterbegin",
   `
   <label class="color-scheme">
     Theme:
-    <select> 
-      <option value="light dark">Automatic</option> 
-      <option value="light">Light</option> 
-      <option value="dark">Dark</option> 
+    <select>
+      <option value="light dark">Automatic</option>
+      <option value="light">Light</option>
+      <option value="dark">Dark</option>
     </select>
   </label>
 `
 );
 
-const select = document.querySelector('.color-scheme select'); /* ADDED */
-select.addEventListener('input', function (event) { /* ADDED */
-  document.documentElement.style.setProperty('color-scheme', event.target.value); /* ADDED */
+const select = document.querySelector(".color-scheme select");
+select.addEventListener("input", function (event) {
+  document.documentElement.style.setProperty("color-scheme", event.target.value);
 });
 
-
+// DYNAMIC NAV
 const pages = [
   { url: "",          title: "Home" },
   { url: "cv/",       title: "CV" },
@@ -41,7 +43,6 @@ pages.forEach(item => {
   if (!ARE_WE_HOME && !url.startsWith("http")) {
     url = "../" + url; 
   }
-
   const a = document.createElement("a");
   a.href = url;
   a.textContent = title;
@@ -50,26 +51,46 @@ pages.forEach(item => {
   if (a.host === location.host && a.pathname === location.pathname) {
     a.classList.add("current");
   }
-
   if (a.host !== location.host) {
     a.target = "_blank";
   }
 });
 
-export async function fetchJSON(url) {
-    try {
-        // Fetch the JSON file from the given URL
-        const response = await fetch(url);
-        if (!response.ok) {
-      throw new Error(`Failed to fetch projects: ${response.statusText}`);
-}
-
-    } catch (error) {
-        console.error('Error fetching or parsing JSON data:', error);
+/* -----------------------------------------------------
+   ADDED/CHANGED: Fetch + Render Functions for Projects
+   ----------------------------------------------------- */
+/**
+ * Fetches JSON from a given URL and returns the parsed data.
+ * - If response not ok, throws an error.
+ */
+export async function fetchJSON(url) { // ADDED
+  try {
+    const response = await fetch(url);
+    if (!response.ok) {
+      throw new Error(`Failed to fetch: ${response.status} ${response.statusText}`);
     }
+    const data = await response.json();
+    return data;
+  } catch (err) {
+    console.error("Error fetching or parsing JSON data:", err);
+  }
 }
 
-const data = await response.json();
-return data; 
+/**
+ * Renders an array of project objects into a given container.
+ * headingLevel is optional and defaults to "h2".
+ */
+export function renderProjects(projects, containerElement, headingLevel = "h2") { // ADDED
+  if (!Array.isArray(projects) || !containerElement) return; // Basic safety checks
+  containerElement.innerHTML = ""; // Clear existing content
 
-
+  for (const project of projects) {
+    const article = document.createElement("article");
+    article.innerHTML = `
+      <${headingLevel}>${project.title}</${headingLevel}>
+      <img src="${project.image}" alt="${project.title}">
+      <p>${project.description}</p>
+    `;
+    containerElement.appendChild(article);
+  }
+}
