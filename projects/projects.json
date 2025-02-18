@@ -1,0 +1,18 @@
+/* ADDED: Import the new fetch/render functions from global.js */
+import { fetchJSON, renderProjects } from "../global.js"; // CHANGED path as needed
+
+// ADDED: Immediately run an async function so we can use "await"
+(async function() {
+  // Fetch the project data from lib/projects.json
+  const projectsData = await fetchJSON("../lib/projects.json"); // ADDED
+  // Select the container for projects
+  const projectsContainer = document.querySelector(".projects"); // ADDED
+  // Render them
+  renderProjects(projectsData, projectsContainer, "h2"); // ADDED
+
+  // Optional: Update the heading with # of projects
+  const titleEl = document.querySelector(".projects-title"); // ADDED
+  if (titleEl && Array.isArray(projectsData)) {
+    titleEl.textContent = `Projects (${projectsData.length})`; // ADDED
+  }
+})();
