@@ -3,7 +3,10 @@ console.log("IT’S ALIVE!");
 function $$(selector, context = document) {
   return Array.from(context.querySelectorAll(selector));
 }
-
+export async function fetchGitHubData(username) {
+  // Just reuse fetchJSON with the GitHub API endpoint
+  return fetchJSON(`https://api.github.com/users/${username}`);
+}
 const ARE_WE_HOME = document.documentElement.classList.contains("home");
 
 // COLOR SCHEME SWITCHER
