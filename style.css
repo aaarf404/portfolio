@@ -3,4 +3,19 @@ body {
          and use the OS’s UI font as the website font
        */
     font: 100%/1.5 system-ui;
+    max-width: 100ch;
+    margin-inline: auto;
+    padding: 5px;
+  }
+
+  .navbar{
+    display:"flex";
+    text-decoration: none;
+    color: inherit;
+    text-align: center;
+    padding: 0.5em;
+    margin-bottom: 0.2em;
+    border-bottom-width: 1px;
+    border-bottom-style: solid;
+    border-bottom-color: oklch(80% 3% 200);
   }
