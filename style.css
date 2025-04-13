@@ -12,7 +12,7 @@ body {
     padding: 1rem;
   }
 
-  nav{
+nav{
     display: flex;
     margin-bottom: 1rem;
     border-bottom-width: 1px;
@@ -20,7 +20,7 @@ body {
     border-bottom-color: oklch(80% 3% 200);
   }
 
-  nav a{
+nav a{
     flex: 1;
     text-align: center;
     text-decoration: none;
@@ -28,13 +28,13 @@ body {
     padding: 0.5em
   }
 
-  nav a:hover {
+nav a:hover {
     background-color: oklch(from var(--color-accent) 95% 5% h);
     border-bottom: 0.4em solid var(--color-accent);
     padding-bottom: 0.1em;
   }  
 
-  nav a.current {
+nav a.current {
     border-bottom-width: 0.4em;
     border-bottom-style: solid;
     border-bottom-color: oklch(80% 3% 200);
@@ -47,24 +47,30 @@ form {
     gap: 1em;
   }
   
-  label {
+label {
     display: contents;
   }
   
-  input,
+input,
   textarea {
     font: inherit;
     width: 100%;
     box-sizing: border-box;
   }
   
-  button {
+button {
     font: inherit;
     width: 100%;
     box-sizing: border-box;
     grid-column: 1 / -1;
     padding: 0.5em;
     cursor: pointer;
+  }
+  
+.projects {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(15em, 1fr));
+    gap: 1em;
   }
   
 
