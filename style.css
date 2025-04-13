@@ -71,8 +71,7 @@ button {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(15em, 1fr));
     gap: 1em;
-    padding-block: 1em;
-    grid-template-rows: subgrid;
+    grid-template-rows: subgrid
   }
 
 .projects article {
@@ -85,6 +84,9 @@ button {
     gap: 1em;
   }
   
+  .projects h2 {
+    margin: 0;
+  }
   
 
 
