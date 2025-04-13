@@ -9,11 +9,7 @@ body {
   }
 
   nav{
-    display:"flex";
-    text-decoration: none;
-    color: inherit;
-    text-align: center;
-    padding: 0.5em;
+    display: flex;
     margin-bottom: 1rem;
     border-bottom-width: 1px;
     border-bottom-style: solid;
