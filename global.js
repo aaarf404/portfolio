@@ -1,3 +1,17 @@
+document.body.insertAdjacentHTML(
+    'afterbegin',
+    `
+    <label class="color-scheme">
+      Theme:
+      <select>
+        <option value="light dark">Automatic</option>
+        <option value="light">Light</option>
+        <option value="dark">Dark</option>
+      </select>
+    </label>
+    `
+  );
+
 console.log("IT’S ALIVE!");
 
 function $$(selector, context = document) {
@@ -42,3 +56,28 @@ for (let p of pages) {
 
   nav.append(a);
 }
+
+//dark mode
+let select = document.querySelector('.color-scheme select');
+function setColorScheme(scheme) {
+  if (scheme === 'light dark') {
+    document.documentElement.style.removeProperty('color-scheme');
+  } else {
+    document.documentElement.style.setProperty('color-scheme', scheme);
+  }
+
+  localStorage.colorScheme = scheme;
+  select.value = scheme;
+}
+
+if ("colorScheme" in localStorage) {
+  setColorScheme(localStorage.colorScheme);
+} else {
+  setColorScheme('light dark'); 
+}
+
+select.addEventListener('input', (event) => {
+  console.log('color scheme changed to', event.target.value);
+  setColorScheme(event.target.value);
+});
+
