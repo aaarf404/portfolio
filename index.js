@@ -7,9 +7,6 @@ async function loadLatestProjects() {
   const projectsContainer = document.querySelector('.projects');
 
   renderProjects(latestProjects, projectsContainer, 'h2');
-}
-
-loadLatestProjects();
 const githubData = await fetchGitHubData('aaarf404');
 const profileStats = document.querySelector('#profile-stats');
 if (profileStats) {
@@ -22,3 +19,6 @@ if (profileStats) {
       </dl>
     `;
   }  
+}
+
+loadLatestProjects();
