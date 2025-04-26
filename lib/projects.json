@@ -1,21 +1,25 @@
 [
     {
         "title": "Project One",
+        "year": 2022,
         "image": "https://vis-society.github.io/labs/2/images/empty.svg",
         "description": "Details about Project1 will be added soon. Stay tuned!"
     },
     {
         "title": "Project Two",
+        "year": 2023,
         "image": "https://vis-society.github.io/labs/2/images/empty.svg",
         "description": "Details about Project2 will be added soon. Stay tuned!"
     },
     {
         "title": "Project Three",
+        "year": 2024,
         "image": "https://vis-society.github.io/labs/2/images/empty.svg",
         "description": "Details about Project 3 will be added soon. Stay tuned!"
     },
     {
         "title": "Project Four",
+        "year": 2025,
         "image": "https://vis-society.github.io/labs/2/images/empty.svg",
         "description": "Details about Project 4 will be added soon. Stay tuned!"
     }
