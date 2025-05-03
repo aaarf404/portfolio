@@ -16,43 +16,46 @@ searchInput.addEventListener('input', (event) => {
 });
 
 function updateFilteredAndRender() {
-  const filteredProjects = projects.filter((project) => {
-    const values = Object.values(project).join('\n').toLowerCase();
-    return values.includes(query.toLowerCase());
-  });
-
-  const selectedYear = selectedIndex !== -1 ? getYearByIndex(selectedIndex) : null;
-  const finalProjects = selectedYear
-    ? filteredProjects.filter((p) => p.year == selectedYear)
-    : filteredProjects;
-
-  renderProjects(finalProjects, projectsContainer, 'h2');
-  renderPieChart(filteredProjects);
+  const filtered = getFilteredProjects();
+  renderProjects(filtered, projectsContainer, 'h2');
+  renderPieChart(projects);
 }
 
-function getYearByIndex(index) {
-  const rolledData = d3.rollups(
-    projects,
-    v => v.length,
-    d => d.year
-  );
-  return rolledData.map(([year]) => year)[index];
+function getFilteredProjects() {
+  let result = projects;
+
+  if (selectedIndex !== -1 && pieData[selectedIndex]) {
+    const selectedYear = pieData[selectedIndex].label;
+    result = result.filter(p => p.year == selectedYear);
+  }
+
+  if (query.trim() !== '') {
+    const lowerQuery = query.toLowerCase();
+    result = result.filter(p =>
+      Object.values(p).join('\n').toLowerCase().includes(lowerQuery)
+    );
+  }
+
+  return result;
 }
 
-function renderPieChart(projectsGiven) {
+let pieData = [];
+
+function renderPieChart(fullProjects) {
   svg.selectAll('path').remove();
   legend.selectAll('li').remove();
 
   const rolledData = d3.rollups(
-    projectsGiven,
+    fullProjects,
     v => v.length,
     d => d.year
   );
-  const data = rolledData.map(([year, count]) => ({ label: year, value: count }));
+  pieData = rolledData.map(([year, count]) => ({ label: year, value: count }));
+
   const colors = d3.scaleOrdinal(d3.schemeTableau10);
   const arcGenerator = d3.arc().innerRadius(0).outerRadius(50);
   const sliceGenerator = d3.pie().value(d => d.value);
-  const arcData = sliceGenerator(data);
+  const arcData = sliceGenerator(pieData);
 
   svg
     .selectAll('path')
@@ -61,7 +64,6 @@ function renderPieChart(projectsGiven) {
     .append('path')
     .attr('d', arcGenerator)
     .attr('fill', (_, i) => colors(i))
-    .attr('style', 'cursor: pointer; transition: 300ms')
     .attr('class', (_, i) => (i === selectedIndex ? 'selected' : ''))
     .on('click', (_, i) => {
       selectedIndex = selectedIndex === i ? -1 : i;
@@ -70,7 +72,7 @@ function renderPieChart(projectsGiven) {
 
   legend
     .selectAll('li')
-    .data(data)
+    .data(pieData)
     .enter()
     .append('li')
     .attr('style', (_, i) => `--color:${colors(i)}`)

@@ -181,8 +181,8 @@ button {
 }
 
 path {
-  transition: 300ms;
   cursor: pointer;
+  transition: 300ms;
 }
 
 .selected {
