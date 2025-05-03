@@ -20,8 +20,23 @@ function updateFilteredAndRender() {
     const values = Object.values(project).join('\n').toLowerCase();
     return values.includes(query.toLowerCase());
   });
-  renderProjects(filteredProjects, projectsContainer, 'h2');
+
+  const selectedYear = selectedIndex !== -1 ? getYearByIndex(selectedIndex) : null;
+  const finalProjects = selectedYear
+    ? filteredProjects.filter((p) => p.year == selectedYear)
+    : filteredProjects;
+
+  renderProjects(finalProjects, projectsContainer, 'h2');
   renderPieChart(filteredProjects);
+}
+
+function getYearByIndex(index) {
+  const rolledData = d3.rollups(
+    projects,
+    v => v.length,
+    d => d.year
+  );
+  return rolledData.map(([year]) => year)[index];
 }
 
 function renderPieChart(projectsGiven) {
@@ -47,9 +62,10 @@ function renderPieChart(projectsGiven) {
     .attr('d', arcGenerator)
     .attr('fill', (_, i) => colors(i))
     .attr('style', 'cursor: pointer; transition: 300ms')
+    .attr('class', (_, i) => (i === selectedIndex ? 'selected' : ''))
     .on('click', (_, i) => {
       selectedIndex = selectedIndex === i ? -1 : i;
-      updateSelection(data[i]?.label);
+      updateFilteredAndRender();
     });
 
   legend
@@ -58,37 +74,12 @@ function renderPieChart(projectsGiven) {
     .enter()
     .append('li')
     .attr('style', (_, i) => `--color:${colors(i)}`)
+    .attr('class', (_, i) => (i === selectedIndex ? 'selected' : ''))
     .html((d, i) => `<span class="swatch"></span> ${d.label} <em>(${d.value})</em>`)
     .on('click', (_, i) => {
       selectedIndex = selectedIndex === i ? -1 : i;
-      updateSelection(data[i]?.label);
+      updateFilteredAndRender();
     });
-
-  updateSelectionHighlight();
-}
-
-function updateSelection(selectedYear) {
-  if (selectedIndex === -1) {
-    updateFilteredAndRender();
-    return;
-  }
-
-  const filteredByYear = projects.filter(p => p.year == selectedYear);
-  const furtherFiltered = filteredByYear.filter((project) => {
-    const values = Object.values(project).join('\n').toLowerCase();
-    return values.includes(query.toLowerCase());
-  });
-
-  renderProjects(furtherFiltered, projectsContainer, 'h2');
-  renderPieChart(filteredByYear);
-}
-
-function updateSelectionHighlight() {
-  svg.selectAll('path')
-    .attr('class', (_, i) => (i === selectedIndex ? 'selected' : ''));
-
-  legend.selectAll('li')
-    .attr('class', (_, i) => (i === selectedIndex ? 'selected' : ''));
 }
 
 async function init() {
