@@ -5,6 +5,7 @@ let query = '';
 let projects = [];
 let selectedYear = null;
 let pieData = [];
+let colorScale;
 
 const searchInput = document.querySelector('.searchBar');
 const projectsContainer = document.querySelector('.projects');
@@ -48,10 +49,15 @@ function renderPieChart(fullProjects) {
     v => v.length,
     d => d.year
   );
-
   pieData = rolledData.map(([year, count]) => ({ label: year, value: count }));
 
-  const colors = d3.scaleOrdinal(d3.schemeTableau10);
+  if (!colorScale) {
+    const years = Array.from(new Set(fullProjects.map(p => p.year)));
+    colorScale = d3.scaleOrdinal()
+      .domain(years)
+      .range(d3.schemeTableau10);
+  }
+
   const arcGenerator = d3.arc().innerRadius(0).outerRadius(50);
   const sliceGenerator = d3.pie().value(d => d.value);
   const arcData = sliceGenerator(pieData);
@@ -62,11 +68,10 @@ function renderPieChart(fullProjects) {
     .enter()
     .append('path')
     .attr('d', arcGenerator)
-    .attr('fill', (_, i) => colors(i))
+    .attr('fill', d => colorScale(d.data.label))
     .attr('class', (d) => d.data.label === selectedYear ? 'selected' : '')
     .on('click', (event, d) => {
-      const clickedYear = d.data.label;
-      selectedYear = (selectedYear === clickedYear) ? null : clickedYear;
+      selectedYear = (selectedYear === d.data.label) ? null : d.data.label;
       updateFilteredAndRender();
     });
 
@@ -75,12 +80,11 @@ function renderPieChart(fullProjects) {
     .data(pieData)
     .enter()
     .append('li')
-    .attr('style', (_, i) => `--color:${colors(i)}`)
+    .attr('style', d => `--color:${colorScale(d.label)}`)
     .attr('class', (d) => d.label === selectedYear ? 'selected' : '')
-    .html((d, i) => `<span class="swatch"></span> ${d.label} <em>(${d.value})</em>`)
+    .html(d => `<span class="swatch"></span> ${d.label} <em>(${d.value})</em>`)
     .on('click', (event, d) => {
-      const clickedYear = d.label;
-      selectedYear = (selectedYear === clickedYear) ? null : clickedYear;
+      selectedYear = (selectedYear === d.label) ? null : d.label;
       updateFilteredAndRender();
     });
 }
