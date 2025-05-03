@@ -4,6 +4,7 @@ import * as d3 from 'https://cdn.jsdelivr.net/npm/d3@7.9.0/+esm';
 let query = '';
 let projects = [];
 let selectedIndex = -1;
+let pieData = [];
 
 const searchInput = document.querySelector('.searchBar');
 const projectsContainer = document.querySelector('.projects');
@@ -14,12 +15,6 @@ searchInput.addEventListener('input', (event) => {
   query = event.target.value;
   updateFilteredAndRender();
 });
-
-function updateFilteredAndRender() {
-  const filtered = getFilteredProjects();
-  renderProjects(filtered, projectsContainer, 'h2');
-  renderPieChart(projects);
-}
 
 function getFilteredProjects() {
   let result = projects;
@@ -39,14 +34,17 @@ function getFilteredProjects() {
   return result;
 }
 
-let pieData = [];
+function updateFilteredAndRender() {
+  const filtered = getFilteredProjects();
+  renderProjects(filtered, projectsContainer, 'h2');
+}
 
-function renderPieChart(fullProjects) {
+function renderPieChart(allProjects) {
   svg.selectAll('path').remove();
   legend.selectAll('li').remove();
 
   const rolledData = d3.rollups(
-    fullProjects,
+    allProjects,
     v => v.length,
     d => d.year
   );
@@ -68,6 +66,7 @@ function renderPieChart(fullProjects) {
     .on('click', (_, i) => {
       selectedIndex = selectedIndex === i ? -1 : i;
       updateFilteredAndRender();
+      renderPieChart(projects);
     });
 
   legend
@@ -81,12 +80,14 @@ function renderPieChart(fullProjects) {
     .on('click', (_, i) => {
       selectedIndex = selectedIndex === i ? -1 : i;
       updateFilteredAndRender();
+      renderPieChart(projects);
     });
 }
 
 async function init() {
   projects = await fetchJSON('/portfolio/lib/projects.json');
   document.querySelector('.projects-title').textContent = `${projects.length} Projects`;
+  renderPieChart(projects);
   updateFilteredAndRender();
 }
 
