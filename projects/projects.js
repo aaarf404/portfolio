@@ -17,46 +17,41 @@ searchInput.addEventListener('input', (event) => {
   updateFilteredAndRender();
 });
 
-function updateFilteredAndRender() {
-  const filteredCards = getFilteredProjects();
-  renderProjects(filteredCards, projectsContainer, 'h2');
-  renderPieChart(projects);
-}
-
-function getFilteredProjects() {
+function getSearchFilteredProjects() {
   let result = projects;
-
-  if (selectedYear !== null) {
-    result = result.filter(p => String(p.year) === String(selectedYear));
-  }
-
   if (query.trim() !== '') {
     const lowerQuery = query.toLowerCase();
-    result = result.filter(p =>
+    result = result.filter(p => 
       Object.values(p).join('\n').toLowerCase().includes(lowerQuery)
     );
   }
-
   return result;
 }
 
-function renderPieChart(fullProjects) {
+function getFilteredProjects() {
+  let result = getSearchFilteredProjects();
+  if (selectedYear !== null) {
+    result = result.filter(p => String(p.year) === String(selectedYear));
+  }
+  return result;
+}
+
+function updateFilteredAndRender() {
+  const filteredCards = getFilteredProjects();
+  renderProjects(filteredCards, projectsContainer, 'h2');
+  renderPieChart(getSearchFilteredProjects());
+}
+
+function renderPieChart(filteredProjects) {
   svg.selectAll('path').remove();
   legend.selectAll('li').remove();
 
   const rolledData = d3.rollups(
-    fullProjects,
+    filteredProjects,
     v => v.length,
     d => d.year
   );
   pieData = rolledData.map(([year, count]) => ({ label: year, value: count }));
-
-  if (!colorScale) {
-    const years = Array.from(new Set(fullProjects.map(p => p.year)));
-    colorScale = d3.scaleOrdinal()
-      .domain(years)
-      .range(d3.schemeTableau10);
-  }
 
   const arcGenerator = d3.arc().innerRadius(0).outerRadius(50);
   const sliceGenerator = d3.pie().value(d => d.value);
@@ -92,6 +87,12 @@ function renderPieChart(fullProjects) {
 async function init() {
   projects = await fetchJSON('/portfolio/lib/projects.json');
   document.querySelector('.projects-title').textContent = `${projects.length} Projects`;
+  
+  const years = Array.from(new Set(projects.map(p => p.year)));
+  colorScale = d3.scaleOrdinal()
+    .domain(years)
+    .range(d3.schemeTableau10);
+  
   updateFilteredAndRender();
 }
 
