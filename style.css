@@ -175,8 +175,28 @@ button {
   border-radius: 50%;
   display: inline-block;
 }
-
   
+:has(path:hover) path:not(:hover) {
+  opacity: 0.5;
+}
+
+path {
+  transition: 300ms;
+  cursor: pointer;
+}
+
+.selected {
+  --color: oklch(60% 45% 0) !important;
+}
+
+:is(path).selected {
+  fill: var(--color);
+}
+
+.legend .selected {
+  --color: oklch(60% 45% 0) !important;
+}
+
 
 
   
