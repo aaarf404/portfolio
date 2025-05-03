@@ -26,7 +26,7 @@ function getFilteredProjects() {
   let result = projects;
 
   if (selectedYear !== null) {
-    result = result.filter(p => p.year == selectedYear);
+    result = result.filter(p => String(p.year) === String(selectedYear));
   }
 
   if (query.trim() !== '') {
