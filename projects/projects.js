@@ -17,19 +17,17 @@ searchInput.addEventListener('input', (event) => {
 });
 
 function updateFilteredAndRender() {
-  const filtered = getFilteredProjects(); 
-  renderProjects(filtered, projectsContainer, 'h2');
+  const filteredCards = getFilteredProjects();
+  renderProjects(filteredCards, projectsContainer, 'h2');
   renderPieChart(projects);
 }
 
 function getFilteredProjects() {
   let result = projects;
 
-  if (selectedIndex !== -1 && pieData.length > selectedIndex) {
-    const selectedYear = pieData[selectedIndex]?.label;
-    if (selectedYear !== undefined) {
-      result = result.filter(p => p.year == selectedYear);
-    }
+  if (selectedIndex !== -1 && pieData[selectedIndex]) {
+    const selectedYear = pieData[selectedIndex].label;
+    result = result.filter(p => p.year == selectedYear);
   }
 
   if (query.trim() !== '') {
@@ -53,6 +51,7 @@ function renderPieChart(fullProjects) {
   );
 
   pieData = rolledData.map(([year, count]) => ({ label: year, value: count }));
+
   const colors = d3.scaleOrdinal(d3.schemeTableau10);
   const arcGenerator = d3.arc().innerRadius(0).outerRadius(50);
   const sliceGenerator = d3.pie().value(d => d.value);
