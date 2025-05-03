@@ -3,7 +3,7 @@ import * as d3 from 'https://cdn.jsdelivr.net/npm/d3@7.9.0/+esm';
 
 let query = '';
 let projects = [];
-let selectedIndex = -1;
+let selectedYear = null;
 let pieData = [];
 
 const searchInput = document.querySelector('.searchBar');
@@ -25,8 +25,7 @@ function updateFilteredAndRender() {
 function getFilteredProjects() {
   let result = projects;
 
-  if (selectedIndex !== -1 && pieData[selectedIndex]) {
-    const selectedYear = pieData[selectedIndex].label;
+  if (selectedYear !== null) {
     result = result.filter(p => p.year == selectedYear);
   }
 
@@ -64,9 +63,10 @@ function renderPieChart(fullProjects) {
     .append('path')
     .attr('d', arcGenerator)
     .attr('fill', (_, i) => colors(i))
-    .attr('class', (_, i) => (i === selectedIndex ? 'selected' : ''))
-    .on('click', (_, i) => {
-      selectedIndex = selectedIndex === i ? -1 : i;
+    .attr('class', (d) => d.data.label === selectedYear ? 'selected' : '')
+    .on('click', (event, d) => {
+      const clickedYear = d.data.label;
+      selectedYear = (selectedYear === clickedYear) ? null : clickedYear;
       updateFilteredAndRender();
     });
 
@@ -76,10 +76,11 @@ function renderPieChart(fullProjects) {
     .enter()
     .append('li')
     .attr('style', (_, i) => `--color:${colors(i)}`)
-    .attr('class', (_, i) => (i === selectedIndex ? 'selected' : ''))
+    .attr('class', (d) => d.label === selectedYear ? 'selected' : '')
     .html((d, i) => `<span class="swatch"></span> ${d.label} <em>(${d.value})</em>`)
-    .on('click', (_, i) => {
-      selectedIndex = selectedIndex === i ? -1 : i;
+    .on('click', (event, d) => {
+      const clickedYear = d.label;
+      selectedYear = (selectedYear === clickedYear) ? null : clickedYear;
       updateFilteredAndRender();
     });
 }
