@@ -1,6 +1,19 @@
 import { fetchJSON, renderProjects } from '../global.js';
 import * as d3 from 'https://cdn.jsdelivr.net/npm/d3@7.9.0/+esm';
 
+let query = '';
+let projects = [];
+const searchInput = document.querySelector('.searchBar');
+
+searchInput.addEventListener('input', (event) => {
+  query = event.target.value;
+  const filteredProjects = projects.filter((project) => {
+    const values = Object.values(project).join('\n').toLowerCase();
+    return values.includes(query.toLowerCase());
+  });
+  renderProjects(filteredProjects, projectsContainer, 'h2');
+});
+
 const projectsContainer = document.querySelector('.projects');
 
 async function init() {
