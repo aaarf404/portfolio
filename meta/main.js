@@ -118,13 +118,15 @@ dots.selectAll('circle')
         d3.select(event.currentTarget)
           .transition().duration(150)
           .style('fill-opacity', 1)
-          .attr('r', d => rScale(d.totalLines) * 1.3); })
+          .attr('r', d => rScale(d.totalLines) * 1.3)
+          .attr('cy', d => yScale(d.hourFrac)); })
       
       .on('mouseleave', (event) => {
         d3.select(event.currentTarget)
           .transition().duration(150)
           .style('fill-opacity', 0.7)
-          .attr('r', d => rScale(d.totalLines));
+          .attr('r', d => rScale(d.totalLines))
+          .attr('cy', d => yScale(d.hourFrac));
       })      
     svg.call(d3.brush().on('start brush end', brushed));
     svg.selectAll('.dots, .overlay ~ *').raise();
