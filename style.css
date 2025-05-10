@@ -196,8 +196,20 @@ path {
 .legend .selected {
   --color: oklch(60% 45% 0) !important;
 }
+.stats {
+  font-family: sans-serif;
+  line-height: 1.5;
+  margin-top: 1rem;
+}
 
+.stats dt {
+  font-weight: bold;
+  margin-top: 0.5rem;
+}
 
+.stats dd {
+  margin: 0;
+}
 
   
 

@@ -40,12 +40,8 @@ function processCommits(data) {
       return ret;
     });
   }
-
-let data = await loadData();
-let commits = processCommits(data);
-console.log(commits);
-
-function renderCommitInfo(data, commits) {
+  
+  function renderCommitInfo(data, commits) {
     const dl = d3.select('#stats').append('dl').attr('class', 'stats');
 
     // num lines
@@ -56,3 +52,9 @@ function renderCommitInfo(data, commits) {
     dl.append('dt').text('Total commits');
     dl.append('dd').text(commits.length);
   }  
+
+
+let data = await loadData();
+let commits = processCommits(data);
+console.log(commits);
+renderCommitInfo(data, commits);
