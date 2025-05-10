@@ -104,11 +104,15 @@ function renderScatterPlot(data, commits) {
       .attr('cy', d => yScale(d.hourFrac))
       .attr('r', 5)
       .attr('fill', 'steelblue')
-      .on('mouseenter', (event, d) => {
-        renderTooltipContent(d);
+      .on('mouseenter', (event, commit) => {
+        renderTooltipContent(commit);
+        updateTooltipVisibility(true);
+        updateTooltipPosition(event);
       })
       .on('mouseleave', () => {
-      }); 
+        updateTooltipVisibility(false);
+      });
+      
 }
 
 function renderTooltipContent(commit) {
@@ -123,6 +127,17 @@ function renderTooltipContent(commit) {
       dateStyle: 'full',
     });
   }  
+  function updateTooltipVisibility(isVisible) {
+    const tooltip = document.getElementById('commit-tooltip');
+    tooltip.hidden = !isVisible;
+  }
+  
+  function updateTooltipPosition(event) {
+    const tooltip = document.getElementById('commit-tooltip');
+    tooltip.style.left = `${event.clientX}px`;
+    tooltip.style.top = `${event.clientY}px`;
+  }
+
 const data = await loadData();
 const commits = processCommits(data);
 console.log(commits);

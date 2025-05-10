@@ -217,17 +217,22 @@ dl.info {
   gap: 0.25em 1em;
   margin-bottom: 1em;
 }
-
-.tooltip {
+  
+dl.tooltip {
   position: fixed;
   top: 1em;
   left: 1em;
-  background: #f9f9f9;
-  padding: 0.5em;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  font-size: 0.9em;
-  z-index: 10;
+  background-color: rgba(255, 255, 255, 0.8);
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 6px;
+  padding: 0.5em 1em;
+  transition-duration: 500ms;
+  transition-property: opacity, visibility;
+}
+
+dl.tooltip[hidden]:not(:hover, :focus-within) {
+  opacity: 0;
+  visibility: hidden;
 }
 
 circle {
@@ -238,5 +243,5 @@ circle {
 circle:hover {
   transform: scale(1.5);
 }
-  
+
 
