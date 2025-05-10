@@ -91,7 +91,6 @@ const rScale = d3.scaleSqrt()
       .tickFormat('')
       .tickSize(-usableArea.width)
     );
-  svg.selectAll('.dots, .overlay ~ *').raise();
 
   const xAxis = d3.axisBottom(xScale);
   const yAxis = d3.axisLeft(yScale)
@@ -116,14 +115,16 @@ dots.selectAll('circle')
       .attr('fill', 'steelblue')
       .style('fill-opacity', 0.7)
       .on('mouseenter', (event, commit) => {
-        d3.select(event.currentTarget).style('fill-opacity', 1);
-        renderTooltipContent(commit);
-        updateTooltipVisibility(true);
-        updateTooltipPosition(event);
-      })
+        d3.select(event.currentTarget)
+          .transition().duration(150)
+          .style('fill-opacity', 1)
+          .attr('r', d => rScale(d.totalLines) * 1.3); })
+      
       .on('mouseleave', (event) => {
-        d3.select(event.currentTarget).style('fill-opacity', 0.7);
-        updateTooltipVisibility(false);
+        d3.select(event.currentTarget)
+          .transition().duration(150)
+          .style('fill-opacity', 0.7)
+          .attr('r', d => rScale(d.totalLines));
       })      
     svg.call(d3.brush().on('start brush end', brushed));
     svg.selectAll('.dots, .overlay ~ *').raise();
