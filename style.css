@@ -211,5 +211,32 @@ path {
   margin: 0;
 }
 
+dl.info {
+  display: grid;
+  grid-template-columns: max-content auto;
+  gap: 0.25em 1em;
+  margin-bottom: 1em;
+}
+
+.tooltip {
+  position: fixed;
+  top: 1em;
+  left: 1em;
+  background: #f9f9f9;
+  padding: 0.5em;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 0.9em;
+  z-index: 10;
+}
+
+circle {
+  transition: 280ms;
+  transform-origin: center;
+}
+
+circle:hover {
+  transform: scale(1.5);
+}
   
 

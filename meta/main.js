@@ -95,17 +95,34 @@ function renderScatterPlot(data, commits) {
   svg.append('g')
     .attr('transform', `translate(${usableArea.left}, 0)`)
     .call(yAxis);
-  const dots = svg.append('g').attr('class', 'dots');
+    const dots = svg.append('g').attr('class', 'dots');
 
-  dots.selectAll('circle')
-    .data(commits)
-    .join('circle')
-    .attr('cx', d => xScale(d.datetime))
-    .attr('cy', d => yScale(d.hourFrac))
-    .attr('r', 5)
-    .attr('fill', 'steelblue');
+    dots.selectAll('circle')
+      .data(commits)
+      .join('circle')
+      .attr('cx', d => xScale(d.datetime))
+      .attr('cy', d => yScale(d.hourFrac))
+      .attr('r', 5)
+      .attr('fill', 'steelblue')
+      .on('mouseenter', (event, d) => {
+        renderTooltipContent(d);
+      })
+      .on('mouseleave', () => {
+      }); 
 }
 
+function renderTooltipContent(commit) {
+    const link = document.getElementById('commit-link');
+    const date = document.getElementById('commit-date');
+  
+    if (Object.keys(commit).length === 0) return;
+  
+    link.href = commit.url;
+    link.textContent = commit.id;
+    date.textContent = commit.datetime.toLocaleString('en', {
+      dateStyle: 'full',
+    });
+  }  
 const data = await loadData();
 const commits = processCommits(data);
 console.log(commits);
