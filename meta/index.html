@@ -7,6 +7,8 @@
     <link rel="stylesheet" href="../style.css" />
 </head>
 <body>
+    <h1>GitHub Commit Analysis</h1>
+  <p>This interactive scatterplot visualizes commit activity over time. Each dot represents a commit, with position indicating time, size reflecting number of lines edited, and tooltip showing metadata. Use brushing to explore patterns and language usage.</p>
     <h2>Commits by time of day</h2>
     <div id="chart"></div>
     <div id="stats"></div>
@@ -17,7 +19,9 @@
         <dt>Date</dt>
         <dd id="commit-date"></dd>
       </dl>
-      
+      <p id="selection-count">No commits selected</p>
+      <dl id="language-breakdown" class="stats"></dl>
+
     <script type="module" src="../global.js"></script>
     <script type="module" src="main.js"></script>
 </body>
