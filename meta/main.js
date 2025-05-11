@@ -84,9 +84,8 @@ function renderScatterPlot(data, commits) {
   const [minLines, maxLines] = d3.extent(commits, d => d.totalLines);
   rScale = d3.scaleSqrt()
     .domain([minLines, maxLines])
-    .range([4, 30]); // tweak range if needed
+    .range([4, 30]);
 
-  // Axes and gridlines
   svg.append('g')
     .attr('class', 'gridlines')
     .attr('transform', `translate(${usableArea.left}, 0)`)
@@ -130,6 +129,7 @@ function renderScatterPlot(data, commits) {
       .on('mouseleave', (event) => {
         d3.select(event.currentTarget)
           .transition().duration(150)
+          .style('stroke', 'none')
           .style('stroke-width', 0)
           .style('fill-opacity', 0.7);
       
