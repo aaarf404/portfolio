@@ -117,28 +117,27 @@ function renderScatterPlot(data, commits) {
     .attr('fill', 'steelblue')
     .style('fill-opacity', 0.7)
     .on('mouseenter', (event, commit) => {
-      const originalR = parseFloat(d3.select(event.currentTarget).attr('data-original-r'));
-      d3.select(event.currentTarget)
-        .raise()
-        .transition().duration(150)
-        .style('fill-opacity', 1)
-        .attr('r', originalR * 1.3);
+        d3.select(event.currentTarget)
+          .raise()
+          .transition().duration(150)
+          .style('stroke', 'black')
+          .style('stroke-width', 2)
+          .style('fill-opacity', 1);
+      
+        renderTooltipContent(commit);
+        updateTooltipVisibility(true);
+        updateTooltipPosition(event);
+      })
+      .on('mouseleave', (event) => {
+        d3.select(event.currentTarget)
+          .transition().duration(150)
+          .style('stroke-width', 0)
+          .style('fill-opacity', 0.7);
+      
+        updateTooltipVisibility(false);
+      });
+      
 
-      renderTooltipContent(commit);
-      updateTooltipVisibility(true);
-      updateTooltipPosition(event);
-    })
-    .on('mouseleave', (event) => {
-      const originalR = parseFloat(d3.select(event.currentTarget).attr('data-original-r'));
-      d3.select(event.currentTarget)
-        .transition().duration(150)
-        .style('fill-opacity', 0.7)
-        .attr('r', originalR);
-
-      updateTooltipVisibility(false);
-    });
-
-  // Brush
   const brush = d3.brush()
     .extent([[usableArea.left, usableArea.top], [usableArea.right, usableArea.bottom]])
     .on('start brush end', brushed);
@@ -146,7 +145,7 @@ function renderScatterPlot(data, commits) {
   svg.append("g")
     .attr("class", "brush")
     .call(brush)
-    .lower(); // Ensure circles are on top
+    .lower();
 
   svg.selectAll('.dots, .overlay ~ *').raise();
 }
