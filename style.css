@@ -236,12 +236,15 @@ dl.tooltip[hidden]:not(:hover, :focus-within) {
 }
 
 circle {
-  transition: 280ms;
-  transform-origin: center;
+  transition: fill-opacity 0.2s ease, stroke-width 0.2s ease;
 }
 
-circle:hover {
-  transform: scale(1.5);
+@keyframes marching-ants {
+  to {
+    stroke-dashoffset: -8;
+  }
 }
+
+
 
 
