@@ -118,7 +118,6 @@ function renderScatterPlot(data, commits) {
     .style('fill-opacity', 0.7)
     .on('mouseenter', (event, commit) => {
         d3.select(event.currentTarget)
-          .raise()
           .transition().duration(150)
           .style('stroke', 'black')
           .style('stroke-width', 2)
