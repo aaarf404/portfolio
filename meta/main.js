@@ -118,7 +118,7 @@ function renderScatterPlot(data, commits) {
     .style('fill-opacity', 0.7)
     .on('mouseenter', (event, commit) => {
       const originalR = parseFloat(d3.select(event.currentTarget).attr('data-original-r'));
-      d3.select(event.currentTarget)
+      d3.select(event.currentTarget).raise()
         .transition().duration(150)
         .style('fill-opacity', 1)
         .attr('r', originalR * 1.3);
@@ -136,9 +136,10 @@ function renderScatterPlot(data, commits) {
     .extent([[usableArea.left, usableArea.top], [usableArea.right, usableArea.bottom]])
     .on('start brush end', brushed);
 
-  svg.append('g')
-    .attr('class', 'brush')
-    .call(brush);
+    svg.append("g")
+    .attr("class", "brush")
+    .call(brush)
+    .lower();
 
   svg.selectAll('.dots, .overlay ~ *').raise();
 }
@@ -199,21 +200,23 @@ function renderLanguageBreakdown(selection) {
 
   if (selectedCommits.length === 0) {
     container.innerHTML = '';
-    return;
-  }
+    return;}
 
   const lines = selectedCommits.flatMap(d => d.lines);
   const breakdown = d3.rollup(lines, v => v.length, d => d.type);
 
   container.innerHTML = '';
-  for (const [language, count] of breakdown) {
-    const proportion = count / lines.length;
+  Array.from(breakdown)
+  .sort((a, b) => b[1] - a[1])
+  .forEach(([language, count]) => {
+    const totalLines = lines.length || 1;
+    const proportion = count / totalLines;;
     const formatted = d3.format('.1%')(proportion);
     container.innerHTML += `
       <dt>${language}</dt>
       <dd>${count} lines (${formatted})</dd>
     `;
-  }
+  })
 }
 
 function isCommitSelected(selection, d) {
@@ -224,10 +227,10 @@ function isCommitSelected(selection, d) {
   const y = yScale(d.hourFrac);
   const originalR = rScale(d.totalLines);
 
-  return x - originalR <= x1 && 
-         x + originalR >= x0 && 
-         y - originalR <= y1 && 
-         y + originalR >= y0;
+  return x >= x0 && 
+       x <= x1 && 
+       y >= y0 && 
+       y <= y1;
 }
 
 const data = await loadData();
