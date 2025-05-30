@@ -238,22 +238,24 @@ renderScatterPlot(data, commits);
 
 //lab8
 let commitProgress = 100;
+let commitMaxTime;
+let timeScale;
 
-let timeScale = d3
+timeScale = d3
   .scaleTime()
   .domain([
     d3.min(commits, (d) => d.datetime),
     d3.max(commits, (d) => d.datetime),
   ])
   .range([0, 100]);
-let commitMaxTime = timeScale.invert(commitProgress);
 
+commitMaxTime = timeScale.invert(commitProgress);
 const slider = document.getElementById("commit-progress");
 const timeDisplay = document.getElementById("commit-time");
 
 function onTimeSliderChange() {
     commitProgress = +slider.value;
-    commitMaxTime = x.invert(commitProgress);
+    commitMaxTime = timeScale.invert(commitProgress);
     timeDisplay.textContent = commitMaxTime.toLocaleString();
 }
 
