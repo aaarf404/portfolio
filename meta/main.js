@@ -259,6 +259,8 @@ function onTimeSliderChange() {
     commitMaxTime = timeScale.invert(commitProgress);
     timeDisplay.textContent = commitMaxTime.toLocaleString();
     filteredCommits = commits.filter((d)=> d.datetime <= commitMaxTime);
+
+updateScatterPlot(data, filteredCommits);
 }
 
 slider.addEventListener("input", onTimeSliderChange);
@@ -280,14 +282,14 @@ function updateScatterPlot(data, commits) {
   
     const svg = d3.select('#chart').select('svg');
   
-    xScale = xScale.domain(d3.extent(commits, (d) => d.datetime));
+    xScale.domain(d3.extent(commits, (d) => d.datetime));
   
     const [minLines, maxLines] = d3.extent(commits, (d) => d.totalLines);
     const rScale = d3.scaleSqrt().domain([minLines, maxLines]).range([2, 30]);
   
-    const xAxis = svg.select('g.x-axis');
+    const xAxisGroup = svg.select('g.x-axis');
     xAxisGroup.selectAll('*').remove();
-    xAxisGroup.class(xAxis);
+    xAxisGroup.call(d3.axisBottom(xScale));
   
     // CHANGE: we should clear out the existing xAxis and then create a new one.
     svg
