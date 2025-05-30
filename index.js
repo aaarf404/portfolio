@@ -1,3 +1,4 @@
+import './global.js';
 import {fetchJSON, renderProjects, fetchGitHubData} from './global.js';
 
 async function loadLatestProjects() {
