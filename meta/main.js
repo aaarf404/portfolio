@@ -1,4 +1,5 @@
 import * as d3 from 'https://cdn.jsdelivr.net/npm/d3@7.9.0/+esm';
+import scrollama from 'https://cdn.jsdelivr.net/npm/scrollama@3.2.0/+esm';
 
 let commits; // Define globally so brushing logic can access it
 let xScale, yScale, rScale; // Needed in helper functions
@@ -39,7 +40,7 @@ function processCommits(data) {
       writable: false,
       enumerable: false,
     });
-
+    ret.files = lines.map(d => ({ file: d.file, line: d.line, type: d.type }));
     return ret;
   });
 }
@@ -392,3 +393,16 @@ function updateScatterPlot(data, commits) {
         updateTooltipVisibility(false);
       });
   }
+
+  function onStepEnter(response) {
+    console.log(response.element.__data__.datetime);
+  }
+  
+  const scroller = scrollama();
+  scroller
+    .setup({
+      container: '#scrolly-1',
+      step: '#scrolly-1 .step',
+    })
+    .onStepEnter(onStepEnter);
+  
