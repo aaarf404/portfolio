@@ -292,7 +292,7 @@ updateFileDisplay(filteredCommits);
 
 function updateFileDisplay(commits) {
   const files = d3.groups(
-    commits.flatMap(d => d.files.map(f => ({ name: f.name, line: f.line, type: f.type }))),
+    commits.flatMap(d => d.lines.map(f => ({ name: f.name, line: f.line, type: f.type }))),
     d => d.name
   ).map(([name, lines]) => ({ name, lines }))
    .sort((a, b) => b.lines.length - a.lines.length);  
@@ -305,14 +305,16 @@ function updateFileDisplay(commits) {
   filesContainer.join(
     enter => {
       const div = enter.append('div');
-      div.append('dt').append('code');
+      div.append('dt');
       div.append('dd');
     },
     update => update,
     exit => exit.remove()
   );
 
-  d3.selectAll('#files dt > code').text(d => d.name);
+  filesContainer.select('dt')
+  .html(d => `<code>${d.name}</code><small>${d.lines.length} lines</small>`);
+
   filesContainer
     .select('dd')
     .selectAll('div')

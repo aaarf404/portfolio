@@ -320,6 +320,11 @@ dd {
   height: 50vh;
 }
 
+small {
+  display: block;
+  opacity: 0.6;
+  font-size: 0.8em;
+}
 
 
 
