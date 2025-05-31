@@ -285,6 +285,14 @@ dd {
   margin-left: 0;
 }
 
+.loc {
+  display: flex;
+  width: 0.5em;
+  aspect-ratio: 1;
+  background: var(--color);
+  border-radius: 50%;
+}
+
 
 
 

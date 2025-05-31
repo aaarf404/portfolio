@@ -2,6 +2,7 @@ import * as d3 from 'https://cdn.jsdelivr.net/npm/d3@7.9.0/+esm';
 
 let commits; // Define globally so brushing logic can access it
 let xScale, yScale, rScale; // Needed in helper functions
+const colors = d3.scaleOrdinal(d3.schemeTableau10);
 
 async function loadData() {
   const data = await d3.csv('loc.csv', (row) => ({
@@ -289,11 +290,15 @@ updateFileDisplay(filteredCommits);
 }
 
 function updateFileDisplay(commits) {
-  const files = d3.flatRollup(
+  const files = d3
+  .flatRollup(
     commits.flatMap(d => d.files.map(f => ({ name: f.name, line: f.line }))),
     v => d3.sum(v, d => d.line),
     d => d.name
-  ).map(([name, total]) => ({ name, lines: total }));
+  )
+  .map(([name, total]) => ({ name, lines: total }))
+  .sort((a, b) => b.lines - a.lines);  // <-- Add this line to sort by lines descending
+
 
   const filesContainer = d3.select('#files')
     .selectAll('div')
@@ -311,12 +316,12 @@ function updateFileDisplay(commits) {
 
   d3.selectAll('#files dt > code').text(d => d.name);
   filesContainer
-  .select('dd')
-  .selectAll('div')
-  .data(d => d.lines)
-  .join('div')
-  .attr('class', 'loc');
-
+    .select('dd')
+    .selectAll('div')
+    .data(d => d.lines)
+    .join('div')
+    .attr('class', 'loc')
+    .attr('style', d => `--color: ${colors(d.type)}`);
 }
 
 
