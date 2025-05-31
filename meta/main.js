@@ -285,13 +285,43 @@ function onTimeSliderChange() {
     filteredCommits = commits.filter((d)=> d.datetime <= commitMaxTime);
 
 updateScatterPlot(data, filteredCommits);
+updateFileDisplay(filteredCommits);
 }
+
+function updateFileDisplay(commits) {
+  const files = d3.flatRollup(
+    commits.flatMap(d => d.files.map(f => ({ name: f.name, line: f.line }))),
+    v => d3.sum(v, d => d.line),
+    d => d.name
+  ).map(([name, total]) => ({ name, lines: total }));
+
+  const filesContainer = d3.select('#files')
+    .selectAll('div')
+    .data(files, d => d.name);
+
+  filesContainer.join(
+    enter => {
+      const div = enter.append('div');
+      div.append('dt').append('code');
+      div.append('dd');
+    },
+    update => update,
+    exit => exit.remove()
+  );
+
+  d3.selectAll('#files dt > code').text(d => d.name);
+  d3.selectAll('#files dd').text(d => `${d.lines} lines`);
+}
+
 
 slider.addEventListener("input", onTimeSliderChange);
 
 onTimeSliderChange();
 
 function updateScatterPlot(data, commits) {
+  const xAxis = d3.axisBottom(xScale);
+  const yAxis = d3.axisLeft(yScale)
+    .tickFormat(d => String(d % 24).padStart(2, '0') + ':00');
     const width = 1000;
     const height = 600;
     const margin = { top: 10, right: 10, bottom: 30, left: 20 };
@@ -309,11 +339,7 @@ function updateScatterPlot(data, commits) {
     xScale.domain(d3.extent(commits, (d) => d.datetime));
   
     const [minLines, maxLines] = d3.extent(commits, (d) => d.totalLines);
-    const rScale = d3.scaleSqrt().domain([minLines, maxLines]).range([2, 30]);
-  
-    const xAxisGroup = svg.select('g.x-axis');
-    xAxisGroup.selectAll('*').remove();
-    xAxisGroup.call(d3.axisBottom(xScale));
+    rScale = d3.scaleSqrt().domain([minLines, maxLines]).range([2, 30]);
   
     // CHANGE: we should clear out the existing xAxis and then create a new one.
     svg.selectAll('g.x-axis').remove();
@@ -325,7 +351,7 @@ function updateScatterPlot(data, commits) {
   
     svg
       .append('g')
-      .attr('transform', `translate(${usableArea.bottom}, 0)`)
+      .attr('transform', `translate(${usableArea.left}, 0)`)
       .attr('class', 'y-axis') // just for consistency
       .call(yAxis);
     
@@ -334,8 +360,6 @@ function updateScatterPlot(data, commits) {
     const sortedCommits = d3.sort(commits, (d) => -d.totalLines);
     dots.selectAll('circle')
         .data(sortedCommits, d => d.id)
-        .exit()
-        .remove();
 
     dots
       .selectAll('circle')
