@@ -310,7 +310,13 @@ function updateFileDisplay(commits) {
   );
 
   d3.selectAll('#files dt > code').text(d => d.name);
-  d3.selectAll('#files dd').text(d => `${d.lines} lines`);
+  filesContainer
+  .select('dd')
+  .selectAll('div')
+  .data(d => d.lines)
+  .join('div')
+  .attr('class', 'loc');
+
 }
 
 
