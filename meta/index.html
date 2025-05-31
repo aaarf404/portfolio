@@ -9,6 +9,21 @@
 <body>
     <h1>GitHub Commit Analysis</h1>
   <p>This interactive scatterplot visualizes commit activity over time. Each dot represents a commit, with position indicating time, size reflecting number of lines edited, and tooltip showing metadata. Use brushing to explore patterns and language usage.</p>
+  <div style = "display: flex; align-items: baseline; gap: 1rem;">
+        <input type = "range" id = "commit-progress" min = "0" max = "100"/>
+        <label for = "commit-progress">Show commits until: </label>
+        <time id="commit-time" style="margin-left: auto;"></time>
+    </div>
+    <dl id="files">
+      <!-- we want the following structure for each file:
+      <div>
+        <dt>
+          <code>{file.name}</code>
+        </dt>
+        <dd>{file.lines.length} lines</dd>
+      </div>
+      -->
+    </dl>
   <div id="scrolly-1">
     <div id="scatter-story">
       <div class="step" data-index="0">
@@ -17,8 +32,8 @@
       </div>
     </div>    
     <div id="scatter-plot">
-      <div id="chart"></div>
       <div id="stats"></div>
+      <div id="chart"></div>
     </div>
   </div>
   
@@ -34,22 +49,7 @@
 
     <script type="module" src="../global.js"></script>
     <script type="module" src="main.js"></script>
-    
-    <div style = "display: flex; align-items: baseline;">
-        <input type = "range" id = "commit-progress" min = "0" max = "100"/>
-        <label for = "commit-progress">Show commits until: </label>
-        <time id = "commit-time"></time>
-    </div>
-    <dl id="files">
-        <!-- we want the following structure for each file:
-        <div>
-          <dt>
-            <code>{file.name}</code>
-          </dt>
-          <dd>{file.lines.length} lines</dd>
-        </div>
-        -->
-      </dl>
+  
       
 </body>
 </html>

@@ -367,9 +367,6 @@ function updateScatterPlot(data, commits) {
     const dots = svg.select('g.dots');
   
     const sortedCommits = d3.sort(commits, (d) => -d.totalLines);
-    dots.selectAll('circle')
-        .data(sortedCommits, d => d.id)
-
     dots
       .selectAll('circle')
       .data(sortedCommits, (d) => d.id)

@@ -236,8 +236,13 @@ dl.tooltip[hidden]:not(:hover, :focus-within) {
 }
 
 circle {
-  r:0;
   transition: fill-opacity 0.2s ease, stroke-width 0.2s ease;
+}
+
+@starting-style {
+  circle {
+    r: 0;
+  }
 }
 
 
