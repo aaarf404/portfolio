@@ -291,14 +291,11 @@ updateFileDisplay(filteredCommits);
 }
 
 function updateFileDisplay(commits) {
-  const files = d3
-  .flatRollup(
-    commits.flatMap(d => d.files.map(f => ({ name: f.name, line: f.line }))),
-    v => d3.sum(v, d => d.line),
+  const files = d3.groups(
+    commits.flatMap(d => d.files.map(f => ({ name: f.name, line: f.line, type: f.type }))),
     d => d.name
-  )
-  .map(([name, total]) => ({ name, lines: total }))
-  .sort((a, b) => b.lines - a.lines);  // <-- Add this line to sort by lines descending
+  ).map(([name, lines]) => ({ name, lines }))
+   .sort((a, b) => b.lines.length - a.lines.length);  
 
 
   const filesContainer = d3.select('#files')
